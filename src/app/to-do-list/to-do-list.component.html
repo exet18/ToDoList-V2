@@ -1,0 +1,22 @@
+<mat-form-field [formGroup]="form" class="example-form-field" appearance="fill">
+  <mat-label>What needs to be done?</mat-label>
+  <input matInput type="text" (keydown.enter)="addElement()" #input formControlName="value">
+  <button *ngIf="input.value" matSuffix mat-icon-button aria-label="Clear" (click)="input.value = ''">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<ul class="to-do-list">
+  <li *ngFor="let i of (todosList$ | async)" class="list__item">
+    <mat-checkbox (click)="changeStatus(i.id)" class="check-item"></mat-checkbox>
+    <div class="to-do-value" (dblclick)="editEnable(i.id)">
+      <p *ngIf="!i.isEdit" [ngClass]="{'complete': i.status}" [textContent]="i.value" class="to-do-text"></p>
+      <input *ngIf="i.isEdit" [value]="i.value" #p (focusout)="edit(i.id,p.value)" (keydown.enter)="edit(i.id,p.value)"
+             class="to-do-input">
+    </div>
+    <button class="delete" matSuffix mat-icon-button aria-label="Clear" (click)="deleteElem(i.id)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </li>
+</ul>
+

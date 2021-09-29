@@ -1,0 +1,55 @@
+.example-form-field {
+  width: 370px;
+}
+.example-form-field mat-label {
+  padding-left: 90px;
+}
+
+.mat-form-field-wrapper {
+  padding: 0;
+}
+
+.to-do-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.to-do-list .list__item {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid gray;
+}
+.to-do-list .list__item:hover .delete {
+  display: block;
+}
+.to-do-list .list__item:hover .delete:hover {
+  cursor: pointer;
+}
+.to-do-list .list__item .to-do-value {
+  display: flex;
+  max-width: 300px;
+  width: 100%;
+  padding: 15px 0 15px 20px;
+}
+.to-do-list .list__item .to-do-value p {
+  margin: 0;
+  height: 20px;
+}
+.to-do-list .list__item .to-do-value .to-do-input {
+  outline: none;
+  border: 0;
+  border-bottom: 1px solid gray;
+  width: 270px;
+  height: 20px;
+}
+.to-do-list .list__item .delete {
+  display: none;
+  width: 10px;
+}
+
+.complete {
+  text-decoration: line-through;
+}
+
+/*# sourceMappingURL=to-do-list.component.css.map */

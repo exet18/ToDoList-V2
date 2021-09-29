@@ -1,0 +1,63 @@
+.example-form-field {
+  width: 370px;
+
+  mat-label {
+    padding-left: 90px;
+  }
+}
+
+.mat-form-field-wrapper {
+  padding: 0;
+}
+
+.to-do-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  .list__item {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid gray;
+
+    &:hover {
+      .delete {
+        display: block;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .to-do-value {
+      display: flex;
+      max-width: 300px;
+      width: 100%;
+      padding: 15px 0 15px 20px;
+
+      p {
+        margin: 0;
+        height: 20px;
+      }
+
+      .to-do-input {
+        outline: none;
+        border: 0;
+        border-bottom: 1px solid gray;
+        width: 270px;
+        height: 20px;
+      }
+    }
+
+    .delete {
+      display: none;
+      width: 10px;
+    }
+  }
+}
+
+.complete {
+  text-decoration: line-through;
+}
