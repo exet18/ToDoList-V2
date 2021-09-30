@@ -53,10 +53,17 @@ export class ToDoControlService {
 
   markReady(id: number) {
     this.todoElems.filter(item => item.id === id).map(i => i.status = !i.status)
+    this._todosList.next(this.todoElems)
     this.saveToLocalStorage()
   }
 
   saveToLocalStorage() {
     this.LocalStorageServices.setData("list", this.todoElems)
+  }
+
+  completed() {
+    this.todoElems = this.todoElems.filter(item => !item.status)
+    this._todosList.next(this.todoElems)
+    this.saveToLocalStorage()
   }
 }

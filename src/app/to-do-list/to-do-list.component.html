@@ -19,4 +19,7 @@
     </button>
   </li>
 </ul>
-
+<div class="count-clear" *ngIf="showControl">
+  <p class="completed">{{waitTodo}} items left</p>
+  <p *ngIf="showClear" class="clear" (click)="clearComplete()">Clear completed</p>
+</div>

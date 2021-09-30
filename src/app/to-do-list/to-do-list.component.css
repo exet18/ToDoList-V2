@@ -52,4 +52,14 @@
   text-decoration: line-through;
 }
 
+.count-clear {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.count-clear .clear:hover {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=to-do-list.component.css.map */

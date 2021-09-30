@@ -61,3 +61,18 @@
 .complete {
   text-decoration: line-through;
 }
+
+.count-clear{
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .completed{
+
+  }
+  .clear{
+    &:hover{
+      cursor: pointer;
+    }
+  }
+}
