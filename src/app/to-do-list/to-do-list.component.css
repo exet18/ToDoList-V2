@@ -28,20 +28,26 @@
 }
 .to-do-list .list__item .to-do-value {
   display: flex;
+  padding: 15px 0 15px 20px;
   max-width: 300px;
   width: 100%;
-  padding: 15px 0 15px 20px;
 }
 .to-do-list .list__item .to-do-value p {
   margin: 0;
+  padding: 0;
   height: 20px;
+  font-size: 16px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .to-do-list .list__item .to-do-value .to-do-input {
+  margin: 0;
+  padding: 0;
+  border: none;
   outline: none;
-  border: 0;
-  border-bottom: 1px solid gray;
-  width: 270px;
+  width: 250px;
   height: 20px;
+  font-size: 16px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .to-do-list .list__item .delete {
   display: none;

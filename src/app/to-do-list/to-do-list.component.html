@@ -1,25 +1,27 @@
-<mat-form-field [formGroup]="form" class="example-form-field" appearance="fill">
-  <mat-label>What needs to be done?</mat-label>
-  <input matInput type="text" (keydown.enter)="addElement()" #input formControlName="value">
-  <button *ngIf="input.value" matSuffix mat-icon-button aria-label="Clear" (click)="input.value = ''">
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-form-field>
+<form [formGroup]="formToDoValue">
+  <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>What needs to be done?</mat-label>
+    <input matInput type="text" (keydown.enter)="addElement()" #input formControlName="value">
+    <button *ngIf="input.value" matSuffix mat-icon-button aria-label="Clear" type="reset">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</form>
 
-<ul class="to-do-list">
-  <li *ngFor="let i of (todosList$ | async)" class="list__item">
+<ul class="to-do-list" *ngIf="IsShowToDo">
+  <li *ngFor="let index = index,let i of todosList" class="list__item">
     <mat-checkbox (click)="changeStatus(i.id)" class="check-item"></mat-checkbox>
     <div class="to-do-value" (dblclick)="editEnable(i.id)">
       <p *ngIf="!i.isEdit" [ngClass]="{'complete': i.status}" [textContent]="i.value" class="to-do-text"></p>
-      <input *ngIf="i.isEdit" [value]="i.value" #p (focusout)="edit(i.id,p.value)" (keydown.enter)="edit(i.id,p.value)"
-             class="to-do-input">
+      <input *ngIf="i.isEdit" [value]="i.value" #editInput (focusout)="edit(i.id,editInput.value)"
+             (keydown.enter)="edit(i.id,editInput.value)" class="to-do-input" appEditAutoFocus>
     </div>
-    <button class="delete" matSuffix mat-icon-button aria-label="Clear" (click)="deleteElem(i.id)">
+    <button class="delete" matSuffix mat-icon-button aria-label="Clear" (click)="deleteElem(index)">
       <mat-icon>close</mat-icon>
     </button>
   </li>
+  <div class="count-clear">
+    <p class="completed">{{waitTodo}} items left</p>
+    <p *ngIf="IsShowClear" class="clear" (click)="clearComplete()">Clear completed</p>
+  </div>
 </ul>
-<div class="count-clear" *ngIf="showControl">
-  <p class="completed">{{waitTodo}} items left</p>
-  <p *ngIf="showClear" class="clear" (click)="clearComplete()">Clear completed</p>
-</div>

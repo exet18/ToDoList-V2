@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Todo} from "../interface/todo";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, of} from "rxjs";
 import {LocalStorageService} from "./local-storage.service";
 
 @Injectable({
@@ -11,59 +11,69 @@ export class ToDoControlService {
   private _todosList = new BehaviorSubject<Todo[]>([]);
   private todoElems: Todo[] = [];
   readonly todos$ = this._todosList.asObservable();
-  private nextId = 0;
 
   constructor(private LocalStorageServices: LocalStorageService) {
-    this.todoElems = this.LocalStorageServices.getData("list")
-    this._todosList.next(this.todoElems)
+    const localData = this.LocalStorageServices.getData("list");
+    if (localData){
+      this.todoElems = localData;
+    }
+    this._todosList.next(this.todoElems);
   }
 
-  addElement(item: Todo) {
-    this.todoElems === null ? this.todoElems = [] : this.todoElems;
-    this.todoElems.length != 0 ? this.nextId = this.todoElems[this.todoElems.length - 1].id : this.nextId = 0;
-    item.id = ++this.nextId;
-    this.todoElems = [...this.todoElems, item]
-    this._todosList.next(this.todoElems)
-    this.saveToLocalStorage()
+  addElement(item: Todo): void {
+    item.id = item.id = Math.floor(Math.random() * 1000000000);
+    this.todoElems.push(item);
+    this._todosList.next(this.todoElems);
+    this.saveToLocalStorage();
   }
 
-  enableEditing(id: number) {
-    this.todoElems.filter(item => item.id === id).map(i => i.isEdit = true)
-    this._todosList.next(this.todoElems)
-  }
-
-  changeValue(id: number, val: string) {
-    this.todoElems.filter(item => item.id === id).map(i => {
-      i.value = val
-      i.isEdit = false
-    })
-    this._todosList.next(this.todoElems)
-    this.saveToLocalStorage()
-  }
-
-  todoDelete(id: number) {
-    this.todoElems.forEach((i, index) => {
-      if (i.id === id) {
-        this.todoElems.splice(index, 1)
+  enableEditing(id: number): void {
+    this.todoElems = this.todoElems.map(item => {
+      if (item.id === id) {
+        item.isEdit = true;
       }
-    })
-    this._todosList.next(this.todoElems)
-    this.saveToLocalStorage()
+      return item;
+    });
+    this._todosList.next(this.todoElems);
+    this.saveToLocalStorage();
   }
 
-  markReady(id: number) {
-    this.todoElems.filter(item => item.id === id).map(i => i.status = !i.status)
-    this._todosList.next(this.todoElems)
-    this.saveToLocalStorage()
+  changeValue(id: number, val: string): void {
+    this.todoElems = this.todoElems.map(item => {
+      if (item.id === id) {
+        item.value = val;
+        item.isEdit = false;
+      }
+      return item;
+    });
+    this._todosList.next(this.todoElems);
+    this.saveToLocalStorage();
   }
 
-  saveToLocalStorage() {
-    this.LocalStorageServices.setData("list", this.todoElems)
+  todoDelete(index: number): void {
+    this.todoElems.splice(index, 1);
+    this._todosList.next(this.todoElems);
+    this.saveToLocalStorage();
   }
 
-  completed() {
-    this.todoElems = this.todoElems.filter(item => !item.status)
-    this._todosList.next(this.todoElems)
-    this.saveToLocalStorage()
+  markReady(id: number): void {
+    this.todoElems = this.todoElems.map(item => {
+      if (item.id === id) {
+        item.status = !item.status;
+      }
+      return item;
+    });
+    this._todosList.next(this.todoElems);
+    this.saveToLocalStorage();
+  }
+
+  saveToLocalStorage(): void {
+    this.LocalStorageServices.setData("list", this.todoElems);
+  }
+
+  completed(): void {
+    this.todoElems = this.todoElems.filter(item => !item.status);
+    this._todosList.next(this.todoElems);
+    this.saveToLocalStorage();
   }
 }

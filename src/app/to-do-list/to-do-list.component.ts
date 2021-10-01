@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ToDoControlService} from "../service/to-do-control.service";
-import {count, filter, mergeMap, tap} from "rxjs/operators";
+import {mergeMap, tap} from "rxjs/operators";
+import {Todo} from "../interface/todo";
 
 @Component({
   selector: 'app-to-do-list',
@@ -10,65 +11,61 @@ import {count, filter, mergeMap, tap} from "rxjs/operators";
 })
 export class ToDoListComponent implements OnInit {
 
-  todosList$ = this.todoControl.todos$
-  form: FormGroup;
-  waitTodo = 0
-  showControl = false
-  showClear : boolean | undefined
+  todosList: Todo[] | undefined;
+  formToDoValue: FormGroup;
+  waitTodo: number | undefined;
+  IsShowClear: boolean | undefined;
+  IsShowToDo: boolean | undefined;
 
   constructor(private formBuilder: FormBuilder, private todoControl: ToDoControlService) {
-    this.form = this.formBuilder.group({
+    this.formToDoValue = this.formBuilder.group({
       id: [0],
       value: [''],
       isEdit: [false],
       status: [false]
-    })
+    });
   }
 
   ngOnInit(): void {
-    this.todosList$.pipe(
-      tap(() => {
-        this.waitTodo = 0
-        this.showClear = false
+    this.todoControl.todos$.pipe(
+      tap((item) => {
+        this.todosList = item;
+        this.waitTodo = item.filter(item => !item.status).length;
+        this.IsShowToDo = item.length > 0;
       }),
       mergeMap(item => {
-        this.showControl = item.length > 0;
-        return item
+        this.IsShowClear = item.some(i => i.status);
+        return item;
       }),
-      filter(item => {
-        if (item.status) {
-          this.showClear = true
-        }
-        return item.status !== true
-      }),
-      tap(() => {
-        this.waitTodo++
-      })
-    ).subscribe()
+    ).subscribe();
   }
 
-  addElement() {
-    this.todoControl.addElement(this.form.value)
-    this.form.controls.value.setValue("")
+  addElement(): void {
+    this.todoControl.addElement(this.formToDoValue.value);
+    this.todoFormControl.setValue('');
   }
 
-  editEnable(id: number) {
-    this.todoControl.enableEditing(id)
+  editEnable(id: number): void {
+    this.todoControl.enableEditing(id);
   }
 
-  edit(id: number, value: string) {
-    this.todoControl.changeValue(id, value)
+  edit(id: number, value: string): void {
+    this.todoControl.changeValue(id, value);
   }
 
-  deleteElem(id: number) {
-    this.todoControl.todoDelete(id)
+  deleteElem(index: number): void {
+    this.todoControl.todoDelete(index);
   }
 
-  changeStatus(id: number) {
-    this.todoControl.markReady(id)
+  changeStatus(id: number): void {
+    this.todoControl.markReady(id);
   }
 
-  clearComplete() {
-    this.todoControl.completed()
+  clearComplete(): void {
+    this.todoControl.completed();
+  }
+
+  get todoFormControl(): FormControl {
+    return this.formToDoValue.get('value') as FormControl;
   }
 }
